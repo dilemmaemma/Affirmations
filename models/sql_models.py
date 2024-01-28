@@ -2,6 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+# Rough Table Setup
+#   id  | category | keyword   | is_public |                  affirmation_text
+#   1   | healing  | ego death |   False   | I say goodbye to my old self and step into the new me
+
 class Affirmations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(50), nullable=False)
