@@ -1,23 +1,32 @@
 from models.sql_models import db, Affirmations
 from sqlalchemy.exc import SQLAlchemyError
+from bson import ObjectId
+import random
+
+def generate_random_16bit_id():
+    random_id = random.randint(0, 2**16 - 1)
+    hex_string = format(random_id, '04x')
+    object_id = ObjectId(hex_string.zfill(24))
+    return object_id
 
 def get_affirmations():
     return Affirmations.query.all()
 
-def get_affirmations_by_category(category):
+def get_affirmation_by_category(category):
     return Affirmations.query.filter_by(category=category)
 
-def get_affirmations_by_keyword(keyword):
+def get_affirmation_by_keyword(keyword):
     return Affirmations.query.filter_by(keyword=keyword)
 
-def get_affirmations_by_category_and_keyword(category, keyword):
+def get_affirmation_by_category_and_keyword(category, keyword):
     return Affirmations.query.filter_by(category=category, keyword=keyword)
 
-def get_affirmations_by_id(affirmation_id):
+def get_affirmation_by_id(affirmation_id):
     return Affirmations.query.get(affirmation_id)
 
 def add_affirmation(category, keyword, is_public, affirmation_text):
     new_affirmation = Affirmations(
+        affirmation_id=generate_random_16bit_id(),
         category=category,
         keyword=keyword,
         is_public=is_public,
@@ -32,7 +41,7 @@ def add_affirmation(category, keyword, is_public, affirmation_text):
         db.session.rollback()
 
 def update_affirmation(affirmation_id, category, keyword, is_public, affirmation_text):
-    affirmation = get_affirmations_by_id(affirmation_id)
+    affirmation = get_affirmation_by_id(affirmation_id)
     if affirmation:
         try:
             affirmation.category = category
@@ -48,7 +57,7 @@ def update_affirmation(affirmation_id, category, keyword, is_public, affirmation
         return None
 
 def delete_affirmation(affirmation_id):
-    affirmation = get_affirmations_by_id(affirmation_id)
+    affirmation = get_affirmation_by_id(affirmation_id)
     if affirmation:
         try:
             db.session.delete(affirmation)

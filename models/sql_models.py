@@ -8,6 +8,7 @@ db = SQLAlchemy()
 
 class Affirmations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    affirmation_id = db.ObjectIdField(unique=True)
     category = db.Column(db.String(50), nullable=False)
     keyword = db.Column(db.String(50), nullable=False)
     is_public = db.Column(db.Boolean, default=False)
