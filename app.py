@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
-from models.sql_models import db, Affirmation
-from models.nosql_models import no_db, Affirmation
+from bson import ObjectId
+from models.sql_models import db, Affirmations as SQLAffirmation
+from models.nosql_models import no_db, Affirmation as NoSQLAffirmation
 from helpers.sql_helpers import (
     get_affirmations,
     get_affirmation_by_category,
@@ -59,7 +60,7 @@ def create_affirmation():
     data = request.json
     added_affirmation = add_affirmation(data['category'], data['keyword'], data['is_public'], data['affirmation_text'])
     if data['is_public']:
-        created_public_affirmation = create_public_affirmation(data['user'], data['user_id'], data['category'], data['keyword'], data['affirmation_text']) # Create a way to pull user and id from profile
+        created_public_affirmation = create_public_affirmation(data['user'], ObjectId(data['user_id']), data['category'], data['keyword'], data['affirmation_text']) # Create a way to pull user and id from profile
     return jsonify({'message': 'Affirmation added successfully', 'affirmation': added_affirmation, 'public affirmation': created_public_affirmation}), 201
 
 @app.route('/affirmations/<int:affirmation_id>', methods=['PUT'])
@@ -67,7 +68,7 @@ def update_affirmation_route(affirmation_id):
     data = request.json
     updated_affirmation = update_affirmation(affirmation_id, data['category'], data['keyword'], data['is_public'], data['affirmation_text'])
     if data['is_public']:
-        updated_public_affirmation = update_public_affirmation(affirmation_id, data['user'], data['user_id'], data['category'], data['keyword'], data['affirmation_text']) # Create a way to pull user and id from profile
+        updated_public_affirmation = update_public_affirmation(affirmation_id, data['user'], ObjectId(data['user_id']), data['category'], data['keyword'], data['affirmation_text']) # Create a way to pull user and id from profile
     return jsonify({'message': 'Affirmation updated successfully', 'affirmation': updated_affirmation, 'public_affirmation': updated_public_affirmation})
 
 @app.route('/affirmations/<int:affirmation_id>', methods=['DELETE'])
