@@ -3,12 +3,21 @@
 Backend program that users can utilize to either store affirmations to later pull them at any time, or get affirmations that have already been sent to the database. Affirmations can be searched based upon keywords or category
 
 ## Endpoints
-- `[GET] /affirmations/<category>` - Pulls all affirmations from a certain category
-- `[GET] /affirmations/<keyword>` - Pulls all affirmations with a certain keyword
-- `[GET] /affirmations/<category>/<keyword>` - Pulls all affirmations from a certain category that match a certain keyword
-- `[POST] /affirmations/<category>` - Adds user input affirmation to the SQL database
-- `[PATCH] /affirmations/<category>` - Edits user input affirmation and uploads it to the SQL database
-- `[DELETE] /affirmations/<category>` - Removes selected affirmation from database
+### Private
+- `[GET] /affirmations` - Pulls all affirmations from database
+- `[GET] /affirmations/<int:affirmation_id>` - Pulls affirmation with specific id
+- `[GET] /affirmations/category:<category>` - Pulls all affirmations from a certain category
+- `[GET] /affirmations/keyword:<keyword>` - Pulls all affirmations with a certain keyword
+- `[GET] /affirmations/category:<category>/keyword:<keyword>` - Pulls all affirmations from a certain category that match a certain keyword
+- `[POST] /affirmations` - Adds affirmation to the SQL database
+- `[PATCH] /affirmations/<int:affirmation_id>` - Edits affirmation and uploads it to the SQL database
+- `[DELETE] /affirmations/<int:affirmation_id>` - Removes selected affirmation from database
+### Public
+- `[GET] /affirmations/public` - Pulls all public affirmations
+- `[GET] /affirmations/public/<int:affirmation_id>` - Pulls public affirmation with specific id
+- `[GET] /affirmations/public/category:<category>` - Pulls all public affirmations from a certain category
+- `[GET] /affirmations/public/keyword:<keyword>` - Pulls all public affirmations with a certain keyword
+- `[GET] /affirmations/public/category:<category>/keyword:<keyword>` - Pulls all public affirmations from a certain category that match a certain keyword
 
 ## Packages Used
 - Flask
