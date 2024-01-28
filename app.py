@@ -108,42 +108,6 @@ def get_single_public_affirmation(affirmation_id):
         return jsonify(affirmation)
     return jsonify({'message': 'Affirmation not found'}), 404
 
-# Don't need routes for these, only functions
-# @app.route('/affirmations/public', methods=['POST'])  # Used only if the user selects to have their affirmation uploaded publicly
-# def create_public_affirmation():
-#     data = request.json
-#     add_public_affirmation(data['user'], data['user_id'], data['category'], data['keyword'], data['affirmation_text'])
-#     return jsonify({'message': 'Public affirmation added successfully'})
-
-# @app.route('/affirmations/public', methods=['PUT']) # Used only if the user selects to have their affirmation uploaded publicly
-# def update_public_affirmation():
-#     data = request.json
-#     affirmation_id = data.get('id')
-#     if not affirmation_id:
-#         return jsonify({'message': 'Missing affirmation ID in the request'}), 400
-
-#     updated_affirmation = update_public_affirmation(
-#         affirmation_id,
-#         data.get('category'),
-#         data.get('keyword'),
-#         data.get('affirmation_text')
-#     )
-
-#     if updated_affirmation:
-#         return jsonify({'message': 'Public affirmation updated successfully'})
-#     else:
-#         return jsonify({'message': 'Public affirmation not found'}), 404
-
-# @app.route('/affirmations/public', methods=['DELETE']) # Used only if the user selects to have their affirmation uploaded publicly
-# def delete_public_affirmation():
-#     data = request.json
-#     affirmation_id = data.get('id')
-#     if not affirmation_id:
-#         return jsonify({'message': 'Missing affirmation ID in the request'}), 400
-
-#     result = delete_public_affirmation(affirmation_id)
-#     return jsonify(result)
-
 @app.route('/affirmations/public/category:<category>', methods=['GET'])
 def get_public_affirmations_from_category(category):
     affirmations = get_public_affirmations_by_category(category)
