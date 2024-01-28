@@ -11,4 +11,18 @@ Backend program that users can utilize to either store affirmations to later pul
 - `[DELETE] /affirmations/<category>` - Removes selected affirmation from database
 
 ## Packages Used
--To Be Updated-
+- Flask
+    - Creator: Armin Ronacher
+    - <a href='https://github.com/pallets/flask'>Link</a>
+- Flask-Mongoengine
+    - Creator: Ross Lawley
+    - <a href='https://github.com/MongoEngine/flask-mongoengine'>Link</a>
+- Flask-SQLAlchemy
+    - Creator: Armin Ronacher
+    - <a href='https://github.com/pallets-eco/flask-sqlalchemy'>Link</a>
+- Mongoengine
+    - Creator: Harry Marr
+    - <a href='https://github.com/MongoEngine/mongoengine'>Link</a>
+- SQLAlchemy
+    - Creator: Michael Bayer
+    - <a href='https://github.com/sqlalchemy/sqlalchemy'>Link</a>
