@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "affirmations"
+version = "0.1.0"
+description = "Python backend application using Flask to create and read affirmations"
+authors = ["dilemmaemma <emmaf.henderson@outlook.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Flask = "^3.0.1"
+SQLAlchemy = "^2.0.25"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
