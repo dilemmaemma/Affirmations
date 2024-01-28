@@ -26,15 +26,15 @@ def affirmations_put():
 def affirmations_delete():
     return jsonify({'message': 'This is the delete route for affirmations'})
 
-@app.route('/affirmations/<category>', methods=['GET'])
+@app.route('/affirmations/category:<category>', methods=['GET'])
 def affirmations_category(category):
     return jsonify({'message': f'This is the get route for the affirmations {category} category'})
 
-@app.route('/affirmations/<keyword>', methods=['GET'])
+@app.route('/affirmations/keyword:<keyword>', methods=['GET'])
 def affirmations_keyword(keyword):
     return jsonify({'message': f'This is the get route for the affirmations {keyword} keyword'})
 
-@app.route('/affirmations/<category>/<keyword>', methods=['GET'])
+@app.route('/affirmations/category:<category>/keyword:<keyword>', methods=['GET'])
 def affirmations_category_keyword(category, keyword):
     return jsonify({'message': f'This is the get route for the affirmations {category} category and {keyword} keyword'})
 
@@ -77,17 +77,17 @@ def affirmations_public_delete():
     result = delete_public_affirmation(affirmation_id)
     return jsonify(result)
 
-@app.route('/affirmations/public/<category>', methods=['GET'])
+@app.route('/affirmations/public/category:<category>', methods=['GET'])
 def affirmations_public_category(category):
     affirmations = get_public_affirmations_by_category(category)
     return jsonify(affirmations)
 
-@app.route('/affirmations/public/<keyword>', methods=['GET'])
+@app.route('/affirmations/public/keyword:<keyword>', methods=['GET'])
 def affirmations_public_keyword(keyword):
     affirmations = get_public_affirmations_by_keyword(keyword)
     return jsonify(affirmations)
 
-@app.route('/affirmations/public/<category>/<keyword>', methods=['GET'])
+@app.route('/affirmations/public/category:<category>/keyword:<keyword>', methods=['GET'])
 def affirmations_public_category_keyword(category, keyword):
     affirmations = get_public_affirmations_by_category_and_keyword(category, keyword)
     return jsonify(affirmations)
