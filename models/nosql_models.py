@@ -4,7 +4,7 @@ no_db = MongoEngine()
 
 # Rough Table Setup
 #   user      |   user_id       | affirmation_id  | category | keyword   |                  affirmation_text
-# dilemmaemma | <12 bit number> | <12 bit number> | healing  | ego death | I say goodbye to my old self and step into the new me
+# dilemmaemma | <12 bit number> | <24 bit number> | healing  | ego death | I say goodbye to my old self and step into the new me
 
 class Affirmation(no_db.Document):
     user = no_db.StringField(max_length=25, default='Guest')

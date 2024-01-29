@@ -3,8 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 # Rough Table Setup
-#   id  | category | keyword   | is_public |                  affirmation_text
-#   1   | healing  | ego death |   False   | I say goodbye to my old self and step into the new me
+#   id  | category | affirmation_id  | keyword   | is_public |                  affirmation_text
+#   1   | healing  | <24 bit number> |ego death |   False   | I say goodbye to my old self and step into the new me
 
 class Affirmations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
