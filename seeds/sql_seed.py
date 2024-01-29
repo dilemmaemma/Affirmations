@@ -1,8 +1,8 @@
 from models.sql_models import db, Affirmations as SQLAffirmation
 from sqlalchemy.exc import SQLAlchemyError
-from seeds.nosql_seed import create_public_affirmation_for_no_sql
 from flask import Flask
 from bson import ObjectId
+from datetime import datetime
 import random
 
 def generate_random_24bit_id():
@@ -36,7 +36,8 @@ def sql_seed_data():
                 category=data['category'],
                 keyword=data['keyword'],
                 is_public=data['is_public'],
-                affirmation_text=data['affirmation_text']
+                affirmation_text=data['affirmation_text'],
+                created_at=datetime.utcnow()
             )
             
             try:
@@ -44,16 +45,6 @@ def sql_seed_data():
                 db.session.commit()
                 print(f"Added affirmation: {new_affirmation}")
                 
-                if data['is_public']:
-                    # If the affirmation is public, create a corresponding NoSQL document
-                    create_public_affirmation_for_no_sql(
-                        user='dilemmaemma',
-                        user_id=ObjectId(),
-                        category=data['category'],
-                        keyword=data['keyword'],
-                        affirmation_text=data['affirmation_text'],
-                        affirmation_id=affirmation_id  # Using the same affirmation_id for NoSQL
-                    )
             except SQLAlchemyError as e:
                 print(f"Error adding affirmation: {e}")
                 db.session.rollback()

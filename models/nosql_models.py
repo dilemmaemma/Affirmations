@@ -8,8 +8,10 @@ no_db = MongoEngine()
 
 class Affirmation(no_db.Document):
     user = no_db.StringField(max_length=25, default='Guest')
-    user_id = no_db.ObjectIdField
-    affirmation_id = no_db.ObjectIdField(unique=True)
+    user_id = no_db.ObjectIdField(required=True)
+    affirmation_id = no_db.ObjectIdField(unique=True, required=True)
     category = no_db.StringField(max_length=50, required=True)
     keyword = no_db.StringField(max_length=50, required=True)
     affirmation_text = no_db.StringField(required=True)
+    created_at = no_db.DateTimeField(required=True)
+    updated_at = no_db.DateTimeField(required=False)
