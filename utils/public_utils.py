@@ -1,19 +1,24 @@
-from flask import request, jsonify
-from bson import ObjectId
+from flask import jsonify
+from datetime import datetime
 from helpers.nosql_helpers import (
     add_public_affirmation, 
     update_public_affirmation, 
     delete_public_affirmation
 )
 
-def create_public_affirmation(data):
-    data = request.json
-    add_public_affirmation(data['user'], ObjectId(data['user_id']), data['category'], data['keyword'], data['affirmation_text'])
+def create_public_affirmation(user, user_id, affirmation_id, category, keyword, affirmation_text):
+    add_public_affirmation(
+        user,
+        user_id,
+        affirmation_id,
+        category,
+        keyword,
+        affirmation_text,
+        created_at=datetime.utcnow()
+    )
     return jsonify({'message': 'Public affirmation added successfully'})
 
-def update_public_affirmation(data):
-    data = request.json
-    affirmation_id = data.get('id')
+def update_public_affirmation(affirmation_id, user, user_id, category, keyword, affirmation_text):
     
     try:
         if not affirmation_id:
@@ -21,9 +26,12 @@ def update_public_affirmation(data):
 
         updated_affirmation = update_public_affirmation(
             affirmation_id,
-            data.get('category'),
-            data.get('keyword'),
-            data.get('affirmation_text')
+            user,
+            user_id,
+            category,
+            keyword,
+            affirmation_text,
+            updated_at=datetime.utcnow()
         )
 
         if updated_affirmation:
@@ -36,9 +44,7 @@ def update_public_affirmation(data):
     except Exception as e:
         return jsonify({'message': f'An unexpected error occurred: {e}'}), 500
 
-def delete_public_affirmation(data):
-    data = request.json
-    affirmation_id = data.get('id')
+def delete_public_affirmation(affirmation_id):
     if not affirmation_id:
         return jsonify({'message': 'Missing affirmation ID in the request'}), 400
 

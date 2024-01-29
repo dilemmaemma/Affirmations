@@ -4,8 +4,8 @@ from datetime import datetime
 db = SQLAlchemy()
 
 # Rough Table Setup
-#   id  | category | affirmation_id  | keyword   | is_public |                  affirmation_text
-#   1   | healing  | <24 bit number> |ego death |   False   | I say goodbye to my old self and step into the new me
+#   id  | category | affirmation_id  | keyword   | is_public |                  affirmation_text                    | created at | updated at
+#   1   | healing  | <24 bit number> |ego death |   False   | I say goodbye to my old self and step into the new me | 2021-05-17 | 2021-05-17
 
 class Affirmations(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from bson import ObjectId
+from datetime import datetime
 from models.sql_models import db, Affirmations as SQLAffirmation
 from models.nosql_models import no_db, Affirmation as NoSQLAffirmation
 from helpers.sql_helpers import (
@@ -58,17 +59,45 @@ def get_single_affirmation(affirmation_id):
 @app.route('/affirmations', methods=['POST'])
 def create_affirmation():
     data = request.json
-    added_affirmation = add_affirmation(data['category'], data['keyword'], data['is_public'], data['affirmation_text'])
+    added_affirmation = add_affirmation(
+        data['category'],
+        data['keyword'],
+        data['is_public'],
+        data['affirmation_text'],
+        created_at=datetime.utcnow()  # Set created_at to current timestamp
+    )
     if data['is_public']:
-        created_public_affirmation = create_public_affirmation(data['user'], ObjectId(data['user_id']), data['category'], data['keyword'], data['affirmation_text']) # Create a way to pull user and id from profile
+        created_public_affirmation = create_public_affirmation(
+            data['user'],
+            ObjectId(data['user_id']),
+            data['affirmation_id'],
+            data['category'],
+            data['keyword'],
+            data['affirmation_text']
+        )
     return jsonify({'message': 'Affirmation added successfully', 'affirmation': added_affirmation, 'public affirmation': created_public_affirmation}), 201
 
+# For updating affirmations
 @app.route('/affirmations/<int:affirmation_id>', methods=['PUT'])
 def update_affirmation_route(affirmation_id):
     data = request.json
-    updated_affirmation = update_affirmation(affirmation_id, data['category'], data['keyword'], data['is_public'], data['affirmation_text'])
+    updated_affirmation = update_affirmation(
+        affirmation_id,
+        data['category'],
+        data['keyword'],
+        data['is_public'],
+        data['affirmation_text'],
+        updated_at=datetime.utcnow()  # Set updated_at to current timestamp
+    )
     if data['is_public']:
-        updated_public_affirmation = update_public_affirmation(affirmation_id, data['user'], ObjectId(data['user_id']), data['category'], data['keyword'], data['affirmation_text']) # Create a way to pull user and id from profile
+        updated_public_affirmation = update_public_affirmation(
+            data['user'],
+            ObjectId(data['user_id']),
+            affirmation_id,
+            data['category'],
+            data['keyword'],
+            data['affirmation_text'],
+        )
     return jsonify({'message': 'Affirmation updated successfully', 'affirmation': updated_affirmation, 'public_affirmation': updated_public_affirmation})
 
 @app.route('/affirmations/<int:affirmation_id>', methods=['DELETE'])
