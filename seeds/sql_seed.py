@@ -8,7 +8,7 @@ import random
 def generate_random_24bit_id():
     random_id = random.randint(0, 2**24 - 1)
     hex_string = format(random_id, '06x')
-    object_id = ObjectId(hex_string)
+    object_id = ObjectId(hex_string.zfill(24))
     return object_id
 
 def sql_seed_data():
