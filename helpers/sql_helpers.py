@@ -1,13 +1,19 @@
 from models.sql_models import db, Affirmations
 from sqlalchemy.exc import SQLAlchemyError
-from bson import ObjectId
 import random
+import uuid
 
-def generate_random_16bit_id():
-    random_id = random.randint(0, 2**16 - 1)
-    hex_string = format(random_id, '04x')
-    object_id = ObjectId(hex_string.zfill(24))
-    return object_id
+def generate_random_24bit_id():
+    # Generate a random 24-bit ID
+    random_id = random.randint(0, 2**24 - 1)
+
+    # Convert the 24-bit ID to a 6-character hex string
+    hex_string = format(random_id, '06x')
+
+    # Generate a UUID from the hex string
+    unique_id = uuid.UUID(hex_string.zfill(32))
+
+    return str(unique_id)
 
 def get_affirmations():
     return Affirmations.query.all()
@@ -26,7 +32,7 @@ def get_affirmation_by_id(affirmation_id):
 
 def add_affirmation(category, keyword, is_public, affirmation_text):
     new_affirmation = Affirmations(
-        affirmation_id=generate_random_16bit_id(),
+        affirmation_id=generate_random_24bit_id(),
         category=category,
         keyword=keyword,
         is_public=is_public,

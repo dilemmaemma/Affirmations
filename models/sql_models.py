@@ -8,6 +8,8 @@ db = SQLAlchemy()
 #   1   | healing  | <24 bit number> |ego death |   False   | I say goodbye to my old self and step into the new me | 2021-05-17 | 2021-05-17
 
 class Affirmations(db.Model):
+    __tablename__ = 'Affirmations'
+    
     id = db.Column(db.Integer, primary_key=True)
     affirmation_id = db.Column(db.String(24), unique=True, nullable=False)
     category = db.Column(db.String(50), nullable=False)

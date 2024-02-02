@@ -1,21 +1,26 @@
 from models.sql_models import db, Affirmations as SQLAffirmation
 from sqlalchemy.exc import SQLAlchemyError
 from flask import Flask
-from bson import ObjectId
 from datetime import datetime
 import random
+import uuid
 
 def generate_random_24bit_id():
+    # Generate a random 24-bit ID
     random_id = random.randint(0, 2**24 - 1)
-    hex_string = format(random_id, '06x')
-    object_id = ObjectId(hex_string.zfill(24))
-    return object_id
 
-def sql_seed_data():
-    app = Flask(__name__)
+    # Convert the 24-bit ID to a 6-character hex string
+    hex_string = format(random_id, '06x')
+
+    # Generate a UUID from the hex string
+    unique_id = uuid.UUID(hex_string.zfill(32))
+
+    return str(unique_id)
+
+def sql_seed_data(app):
     app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///affirmations.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)
+    # db.init_app(app)
     
     with app.app_context():
         # Implement dummy data
@@ -50,4 +55,5 @@ def sql_seed_data():
                 db.session.rollback()
 
 if __name__ == "__main__":
-    sql_seed_data()
+    app = Flask(__name__)
+    sql_seed_data(app)
