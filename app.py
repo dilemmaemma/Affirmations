@@ -24,6 +24,8 @@ no_db.init_app(app)
 
 # Use the application context
 with app.app_context():
+    # Disconnect or dispose of all SQLAlchemy engine instances
+    sql_db.engine.dispose()
     # Create the SQL database tables if they don't exist
     meta = sql_db.metadata
     for table in reversed(meta.sorted_tables):
@@ -40,7 +42,7 @@ app.config['MONGODB_SETTINGS'] = {
 # Use the application context for NoSQL seeding
 with app.app_context():
     # Seed NoSQL data
-    nosql_seed_data()
+    nosql_seed_data(app)
 
 # Register Blueprints
 app.register_blueprint(private_routes_bp)
