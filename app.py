@@ -16,20 +16,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Initialize SQL database
 sql_db.init_app(app)
 
-# Disconnect from existing MongoDB connection
-mongoengine.disconnect(alias='default')
-
 # Initialize NoSQL database
 no_db.init_app(app)
 
 # Use the application context
 with app.app_context():
-    # Disconnect or dispose of all SQLAlchemy engine instances
-    sql_db.engine.dispose()
-    # Create the SQL database tables if they don't exist
-    meta = sql_db.metadata
-    for table in reversed(meta.sorted_tables):
-        table.create(sql_db.engine, checkfirst=True)
     # Seed SQL data
     sql_seed_data(app)
 

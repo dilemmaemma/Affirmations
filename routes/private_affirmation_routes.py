@@ -19,17 +19,28 @@ from utils.public_utils import (
 
 private_routes_bp = Blueprint('private_routes', __name__)
 
+def serialize_affirmation(affirmation):
+    return {
+        'id': str(affirmation.id),
+        'category': affirmation.category,
+        'keyword': affirmation.keyword,
+        'is_public': affirmation.is_public,
+        'affirmation_text': affirmation.affirmation_text,
+        'created_at': affirmation.created_at.isoformat(),
+        'updated_at': affirmation.updated_at.isoformat() if affirmation.updated_at else None
+    }
+
 @private_routes_bp.route('/affirmations', methods=['GET'])
 def get_all_affirmations():
     affirmations = get_affirmations()
-    print(affirmations)
-    return jsonify(affirmations)
+    serialized_affirmations = [serialize_affirmation(affirmation) for affirmation in affirmations]
+    return jsonify(serialized_affirmations)
 
 @private_routes_bp.route('/affirmations/<int:affirmation_id>', methods=['GET'])
 def get_single_affirmation(affirmation_id):
     affirmation = get_affirmation_by_id(affirmation_id)
     if affirmation:
-        return jsonify(affirmation)
+        return jsonify(serialize_affirmation(affirmation))
     return jsonify({'message': 'Affirmation not found'}), 404
 
 @private_routes_bp.route('/affirmations', methods=['POST'])
@@ -40,7 +51,7 @@ def create_affirmation():
         data['keyword'],
         data['is_public'],
         data['affirmation_text'],
-        created_at=datetime.utcnow()  # Set created_at to current timestamp
+        created_at=datetime.utcnow()
     )
     if data['is_public']:
         created_public_affirmation = create_public_affirmation(
@@ -51,9 +62,12 @@ def create_affirmation():
             data['keyword'],
             data['affirmation_text']
         )
-    return jsonify({'message': 'Affirmation added successfully', 'affirmation': added_affirmation, 'public affirmation': created_public_affirmation}), 201
+    return jsonify({
+        'message': 'Affirmation added successfully',
+        'affirmation': serialize_affirmation(added_affirmation),
+        'public_affirmation': serialize_affirmation(created_public_affirmation) if data['is_public'] else None
+    }), 201
 
-# For updating affirmations
 @private_routes_bp.route('/affirmations/<int:affirmation_id>', methods=['PUT'])
 def update_affirmation_route(affirmation_id):
     data = request.json
@@ -63,7 +77,7 @@ def update_affirmation_route(affirmation_id):
         data['keyword'],
         data['is_public'],
         data['affirmation_text'],
-        updated_at=datetime.utcnow()  # Set updated_at to current timestamp
+        updated_at=datetime.utcnow()
     )
     if data['is_public']:
         updated_public_affirmation = update_public_affirmation(
@@ -74,28 +88,38 @@ def update_affirmation_route(affirmation_id):
             data['keyword'],
             data['affirmation_text'],
         )
-    return jsonify({'message': 'Affirmation updated successfully', 'affirmation': updated_affirmation, 'public_affirmation': updated_public_affirmation})
+    return jsonify({
+        'message': 'Affirmation updated successfully',
+        'affirmation': serialize_affirmation(updated_affirmation),
+        'public_affirmation': serialize_affirmation(updated_public_affirmation) if data['is_public'] else None
+    })
 
 @private_routes_bp.route('/affirmations/<int:affirmation_id>', methods=['DELETE'])
 def delete_affirmation_route(affirmation_id):
     deleted_affirmation = delete_affirmation(affirmation_id)
-    # Assuming the is_public flag is present in the request JSON
     data = request.json
     if data['is_public']:
         deleted_public_affirmation = delete_public_affirmation(affirmation_id)
-    return jsonify({'message': 'Affirmation deleted successfully', 'affirmation': deleted_affirmation, 'public_affirmation': deleted_public_affirmation})
+    return jsonify({
+        'message': 'Affirmation deleted successfully',
+        'affirmation': serialize_affirmation(deleted_affirmation),
+        'public_affirmation': serialize_affirmation(deleted_public_affirmation) if data['is_public'] else None
+    })
 
 @private_routes_bp.route('/affirmations/category:<category>', methods=['GET'])
 def get_affirmations_from_category(category):
     affirmations = get_affirmation_by_category(category)
-    return jsonify(affirmations)
+    serialized_affirmations = [serialize_affirmation(affirmation) for affirmation in affirmations]
+    return jsonify(serialized_affirmations)
 
 @private_routes_bp.route('/affirmations/keyword:<keyword>', methods=['GET'])
 def get_affirmations_from_keyword(keyword):
     affirmations = get_affirmation_by_keyword(keyword)
-    return jsonify(affirmations)
+    serialized_affirmations = [serialize_affirmation(affirmation) for affirmation in affirmations]
+    return jsonify(serialized_affirmations)
 
 @private_routes_bp.route('/affirmations/category:<category>/keyword:<keyword>', methods=['GET'])
 def get_affirmations_from_category_and_keyword(category, keyword):
     affirmations = get_affirmation_by_category_and_keyword(category, keyword)
-    return jsonify(affirmations)
+    serialized_affirmations = [serialize_affirmation(affirmation) for affirmation in affirmations]
+    return jsonify(serialized_affirmations)
