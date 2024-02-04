@@ -6,12 +6,15 @@ from helpers.nosql_helpers import (
     get_public_affirmations_by_category_and_keyword, 
     get_public_affirmations_by_id
 )
+from config import COLLECTION
 
 public_routes_bp = Blueprint('public_routes', __name__)
 
 def serialize_public_affirmation(affirmation):
     return {
-        'id': str(affirmation.id),
+        'user': affirmation.user,
+        'user_id': affirmation.user_id,
+        'affirmation_id': str(affirmation.id),
         'category': affirmation.category,
         'keyword': affirmation.keyword,
         'affirmation_text': affirmation.affirmation_text,
@@ -21,7 +24,7 @@ def serialize_public_affirmation(affirmation):
 
 @public_routes_bp.route('/affirmations/public', methods=['GET'])
 def get_all_public_affirmations():
-    affirmations = get_public_affirmations()
+    affirmations = get_public_affirmations(collection_name=COLLECTION)
     serialized_affirmations = [serialize_public_affirmation(affirmation) for affirmation in affirmations]
     return jsonify(serialized_affirmations)
 

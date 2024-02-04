@@ -2,6 +2,7 @@ from models.sql_models import db, Affirmations as SQLAffirmation
 from sqlalchemy.exc import SQLAlchemyError
 from flask import Flask
 from datetime import datetime
+from config import DATABASE_URI
 import random
 import uuid
 
@@ -18,7 +19,7 @@ def generate_random_24bit_id():
     return str(unique_id)
 
 def sql_seed_data(app):
-    app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///affirmations.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     with app.app_context():

@@ -1,8 +1,9 @@
 from models.nosql_models import Affirmation
 from bson import ObjectId
+from config import COLLECTION
 
-def get_public_affirmations():
-    return Affirmation.objects()
+def get_public_affirmations(collection_name=COLLECTION):
+    return Affirmation.objects.using(collection_name)
 
 def get_public_affirmations_by_category(category):
     return Affirmation.objects(category=category)

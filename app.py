@@ -4,7 +4,7 @@ from models.nosql_models import no_db
 from seeds.sql_seed import sql_seed_data
 from seeds.nosql_seed import nosql_seed_data
 from routes import private_routes_bp, public_routes_bp, dev_tools_bp
-from config import DATABASE_URI
+from config import DATABASE_URI, NODB_NAME, MONGO_URI
 import mongoengine
 
 app = Flask(__name__)
@@ -26,8 +26,8 @@ with app.app_context():
 
 # Configure NoSQL database
 app.config['MONGODB_SETTINGS'] = {
-    'db': 'Affirmation',
-    'host': 'localhost',
+    'db': NODB_NAME,
+    'host': MONGO_URI,
 }
 
 # Use the application context for NoSQL seeding

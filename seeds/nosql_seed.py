@@ -2,9 +2,13 @@ from models.nosql_models import no_db, Affirmation as NoSQLAffirmation
 from models.sql_models import Affirmations as SQLAffirmation
 from bson import ObjectId
 from flask import Flask
+from config import MONGO_URI, NODB_NAME
 
 def nosql_seed_data(app):
-    app.config['MONGODB_SETTINGS'] = {'db': 'affirmations', 'host': 'localhost'}
+    app.config['MONGODB_SETTINGS'] = {
+        'db': NODB_NAME, 
+        'host': MONGO_URI
+    }
 
     # Connect to MongoDB outside of the app context
     with app.app_context():

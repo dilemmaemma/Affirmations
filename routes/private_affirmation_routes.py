@@ -21,7 +21,7 @@ private_routes_bp = Blueprint('private_routes', __name__)
 
 def serialize_affirmation(affirmation):
     return {
-        'id': str(affirmation.id),
+        'affirmation_id': str(affirmation.id),
         'category': affirmation.category,
         'keyword': affirmation.keyword,
         'is_public': affirmation.is_public,
